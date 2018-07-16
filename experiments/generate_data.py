@@ -67,8 +67,8 @@ else:
     train_set = np.array(train_set)
     test_set = np.array(test_set)
 
-    train_set = train_set[:, None, None, :]
-    test_set = test_set[:, None, None, :]
+    train_set = train_set[:, :, None, None]
+    test_set = test_set[:, :, None, None]
 
     print(train_set.shape)
     print(test_set.shape)

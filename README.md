@@ -1,18 +1,22 @@
 # CoordConv
+
 ![](https://img.shields.io/badge/pytorch-0.4.0-blue.svg) ![](https://img.shields.io/badge/python-3.6.5-brightgreen.svg)
+
 Pytorch implementation of CoordConv for N-D ConvLayers, and the experiments.
 
-Reference from the paper "An intriguing failing of convolutional neural networks and the CoordConv solution."
+Reference from the paper: [An intriguing failing of convolutional neural networks and the CoordConv solution](https://arxiv.org/abs/1807.03247)
 
 Extends the CoordinateChannel concatenation from 2D to 1D and 3D tensors.
 
 # Requirements
+
 - pytorch 0.4.0
 - torchvision 0.2.1
 - torchsummary 1.3
 - sklearn 0.19.1
 
 # Usage
+
 ```python
 from coordconv import CoordConv1d, CoordConv2d, CoordConv3d
 
@@ -39,17 +43,24 @@ net = Net().to(device)
 ```
 
 # Experiments
+
 Implement experiments from origin paper.
 
 ## Coordinate Classiﬁcation
+
 Use `experiments/generate_data.py` to generate `Uniform` and `Quadrant` datasets for Coordinate Classiﬁcation task.
 
 Use `experiments/train_and_test.py` to train and test neural network model.
 
-### Images
+### Uniform Datasets
 
 |Train|Test|Predictions|
 |:---:|:---:|:---:|
 |![](https://i.loli.net/2018/07/16/5b4c7db11abf9.png)|![](https://i.loli.net/2018/07/16/5b4c7dbd03169.png)|![](https://i.loli.net/2018/07/16/5b4c8d88a70a2.png)|
 
 
+### Quadrant Datasets
+
+|Train|Test|Predictions|
+|:---:|:---:|:---:|
+|![](https://i.loli.net/2018/07/16/5b4c98bba0fec.png)|![](https://i.loli.net/2018/07/16/5b4c98cbf0293.png)|![](https://i.loli.net/2018/07/16/5b4c98d77096f.png)|

@@ -4,10 +4,11 @@ import torch.nn.modules.conv as conv
 
 
 class AddCoords(nn.Module):
-    def __init__(self, rank, with_r=False):
+    def __init__(self, rank, with_r=False, use_cuda=True):
         super(AddCoords, self).__init__()
         self.rank = rank
         self.with_r = with_r
+        self.use_cuda = use_cuda
 
     def forward(self, input_tensor):
         """
@@ -23,7 +24,7 @@ class AddCoords(nn.Module):
             xx_channel = xx_channel * 2 - 1
             xx_channel = xx_channel.repeat(batch_size_shape, 1, 1)
 
-            if torch.cuda.is_available:
+            if torch.cuda.is_available and self.use_cuda:
                 input_tensor = input_tensor.cuda()
                 xx_channel = xx_channel.cuda()
             out = torch.cat([input_tensor, xx_channel], dim=1)
@@ -57,7 +58,7 @@ class AddCoords(nn.Module):
             xx_channel = xx_channel.repeat(batch_size_shape, 1, 1, 1)
             yy_channel = yy_channel.repeat(batch_size_shape, 1, 1, 1)
 
-            if torch.cuda.is_available:
+            if torch.cuda.is_available and self.use_cuda:
                 input_tensor = input_tensor.cuda()
                 xx_channel = xx_channel.cuda()
                 yy_channel = yy_channel.cuda()
@@ -93,7 +94,7 @@ class AddCoords(nn.Module):
             zx_channel = zx_channel.permute(0, 1, 4, 2, 3)
             zz_channel = torch.cat([zx_channel + i for i in range(dim_y)], dim=3)
 
-            if torch.cuda.is_available:
+            if torch.cuda.is_available and self.use_cuda:
                 input_tensor = input_tensor.cuda()
                 xx_channel = xx_channel.cuda()
                 yy_channel = yy_channel.cuda()
@@ -113,11 +114,11 @@ class AddCoords(nn.Module):
 
 class CoordConv1d(conv.Conv1d):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
-                 padding=0, dilation=1, groups=1, bias=True, with_r=False):
+                 padding=0, dilation=1, groups=1, bias=True, with_r=False, use_cuda=True):
         super(CoordConv1d, self).__init__(in_channels, out_channels, kernel_size,
                                           stride, padding, dilation, groups, bias)
         self.rank = 1
-        self.addcoords = AddCoords(self.rank, with_r)
+        self.addcoords = AddCoords(self.rank, with_r, use_cuda=use_cuda)
         self.conv = nn.Conv1d(in_channels + self.rank + int(with_r), out_channels,
                               kernel_size, stride, padding, dilation, groups, bias)
 
@@ -135,11 +136,11 @@ class CoordConv1d(conv.Conv1d):
 
 class CoordConv2d(conv.Conv2d):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
-                 padding=0, dilation=1, groups=1, bias=True, with_r=False):
+                 padding=0, dilation=1, groups=1, bias=True, with_r=False, use_cuda=True):
         super(CoordConv2d, self).__init__(in_channels, out_channels, kernel_size,
                                           stride, padding, dilation, groups, bias)
         self.rank = 2
-        self.addcoords = AddCoords(self.rank, with_r)
+        self.addcoords = AddCoords(self.rank, with_r, use_cuda=use_cuda)
         self.conv = nn.Conv2d(in_channels + self.rank + int(with_r), out_channels,
                               kernel_size, stride, padding, dilation, groups, bias)
 
@@ -157,11 +158,11 @@ class CoordConv2d(conv.Conv2d):
 
 class CoordConv3d(conv.Conv3d):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
-                 padding=0, dilation=1, groups=1, bias=True, with_r=False):
+                 padding=0, dilation=1, groups=1, bias=True, with_r=False, use_cuda=True):
         super(CoordConv3d, self).__init__(in_channels, out_channels, kernel_size,
                                           stride, padding, dilation, groups, bias)
         self.rank = 3
-        self.addcoords = AddCoords(self.rank, with_r)
+        self.addcoords = AddCoords(self.rank, with_r, use_cuda=use_cuda)
         self.conv = nn.Conv3d(in_channels + self.rank + int(with_r), out_channels,
                               kernel_size, stride, padding, dilation, groups, bias)
 

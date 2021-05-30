@@ -85,14 +85,17 @@ class AddCoords(nn.Module):
 
             xy_channel = torch.matmul(xy_range, xx_ones)
             xx_channel = torch.cat([xy_channel + i for i in range(dim_z)], dim=2)
+            xx_channel = xx_channel.repeat(batch_size_shape, 1, 1, 1, 1)
 
             yz_channel = torch.matmul(yz_range, yy_ones)
             yz_channel = yz_channel.permute(0, 1, 3, 4, 2)
             yy_channel = torch.cat([yz_channel + i for i in range(dim_x)], dim=4)
+            yy_channel = yy_channel.repeat(batch_size_shape, 1, 1, 1, 1)
 
             zx_channel = torch.matmul(zx_range, zz_ones)
             zx_channel = zx_channel.permute(0, 1, 4, 2, 3)
             zz_channel = torch.cat([zx_channel + i for i in range(dim_y)], dim=3)
+            zz_channel = zz_channel.repeat(batch_size_shape, 1, 1, 1, 1)
 
             if torch.cuda.is_available and self.use_cuda:
                 input_tensor = input_tensor.cuda()

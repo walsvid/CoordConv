@@ -22,7 +22,7 @@ onehots = onehots.transpose(0, 3, 1, 2)
 
 onehots_tensor = torch.from_numpy(onehots)
 
-conv_layer = nn.Conv2d(in_channels=1, out_channels=1, kernel_size=(9, 9), padding=4, stride=1)
+conv_layer = nn.Conv2d(in_channels=1, out_channels=1, kernel_size=(9, 9), padding=4, stride=1, bias=False)
 w = torch.ones(1, 1, 9, 9)
 conv_layer.weight.data = w
 
